@@ -2,6 +2,7 @@
     "name": "philiprehberger/php-background-jobs",
     "description": "Lightweight background job queue with file-based driver",
     "keywords": ["queue", "jobs", "background", "worker", "async"],
+    "homepage": "https://github.com/philiprehberger/php-background-jobs",
     "license": "MIT",
     "type": "library",
     "authors": [
@@ -26,6 +27,11 @@
         "psr-4": {
             "PhilipRehberger\\BackgroundJobs\\Tests\\": "tests/"
         }
+    },
+    "scripts": {
+        "test": "vendor/bin/phpunit",
+        "lint": "vendor/bin/pint",
+        "analyse": "vendor/bin/phpstan analyse"
     },
     "minimum-stability": "stable",
     "prefer-stable": true,

@@ -8,7 +8,7 @@ Lightweight background job queue with file-based driver.
 
 ## Requirements
 
-- PHP ^8.2
+- PHP 8.2+
 
 ## Installation
 

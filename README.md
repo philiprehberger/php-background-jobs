@@ -107,6 +107,38 @@ class RedisDriver implements QueueDriver
 }
 ```
 
+### Lifecycle Hooks
+
+Register callbacks that fire when a job succeeds or fails:
+
+```php
+use PhilipRehberger\BackgroundJobs\BaseJob;
+
+class SendEmailJob extends BaseJob
+{
+    public function __construct(
+        private readonly string $to,
+    ) {}
+
+    public function handle(): void
+    {
+        // Send the email...
+    }
+}
+
+$job = new SendEmailJob('user@example.com');
+
+$job->onSuccess(function ($job) {
+    echo "Job completed after {$job->getAttempts()} attempt(s).";
+});
+
+$job->onFailure(function ($job, \Throwable $e) {
+    echo "Job failed: {$e->getMessage()}";
+});
+
+$queue->push($job);
+```
+
 ### Error Handling
 
 Failed jobs throw a `JobFailedException`:
@@ -133,7 +165,11 @@ try {
 | `Queue` | `pop(): ?JobPayload` | Pop the next available job |
 | `Queue` | `size(): int` | Get pending job count |
 | `Queue` | `clear(): void` | Remove all jobs |
+| `Queue` | `pending(): array` | Get all pending job payloads |
 | `Worker` | `processNext(Queue $queue, int $maxAttempts = 3): bool` | Process next job |
+| `BaseJob` | `onSuccess(callable $callback): self` | Register a success lifecycle hook |
+| `BaseJob` | `onFailure(callable $callback): self` | Register a failure lifecycle hook |
+| `BaseJob` | `getAttempts(): int` | Get the number of attempts |
 | `JobPayload` | `resolveJob(): Job` | Deserialize the job instance |
 | `JobPayload` | `isAvailable(): bool` | Check if job is ready to process |
 | `JobPayload` | `withIncrementedAttempts(): self` | Clone with incremented attempts |

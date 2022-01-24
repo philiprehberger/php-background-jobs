@@ -71,4 +71,34 @@ final class FileDriver implements QueueDriver
             unlink($file);
         }
     }
+
+    /**
+     * @return list<JobPayload>
+     */
+    public function pending(): array
+    {
+        $files = glob($this->storagePath.'/*.json');
+        if ($files === false || empty($files)) {
+            return [];
+        }
+
+        sort($files);
+
+        $payloads = [];
+        foreach ($files as $file) {
+            $content = file_get_contents($file);
+            if ($content === false) {
+                continue;
+            }
+
+            $data = json_decode($content, true);
+            if (! is_array($data)) {
+                continue;
+            }
+
+            $payloads[] = JobPayload::fromArray($data);
+        }
+
+        return $payloads;
+    }
 }

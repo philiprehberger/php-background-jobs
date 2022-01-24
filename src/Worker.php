@@ -28,10 +28,24 @@ final class Worker
 
         try {
             $job = $payload->resolveJob();
+
+            if ($job instanceof BaseJob) {
+                $job->setAttempts($payload->attempts);
+                $job->restoreCallbacks($payload->id);
+            }
+
             $job->handle();
+
+            if ($job instanceof BaseJob) {
+                $job->fireSuccessCallbacks();
+            }
 
             return true;
         } catch (\Throwable $e) {
+            if (isset($job) && $job instanceof BaseJob) {
+                $job->fireFailureCallbacks($e);
+            }
+
             throw JobFailedException::fromException($payload, $e);
         }
     }

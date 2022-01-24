@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace PhilipRehberger\BackgroundJobs\Tests\Stubs;
 
-use PhilipRehberger\BackgroundJobs\Contracts\Job;
+use PhilipRehberger\BackgroundJobs\BaseJob;
 
-class TestJob implements Job
+class TestJob extends BaseJob
 {
     public static bool $handled = false;
 

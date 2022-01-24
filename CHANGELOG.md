@@ -1,8 +1,15 @@
 # Changelog
 
-All notable changes to this project will be documented in this file.
+All notable changes to `php-background-jobs` will be documented in this file.
 
 ## [Unreleased]
+
+## [1.1.0] - 2026-03-22
+
+### Added
+- `onSuccess()` and `onFailure()` lifecycle hook methods on Job
+- `getAttempts()` method for tracking job attempt count
+- `pending()` method on the job runner for listing queued jobs
 
 ## [1.0.2] - 2026-03-17
 

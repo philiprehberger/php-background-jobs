@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace PhilipRehberger\BackgroundJobs\Tests\Stubs;
 
-use PhilipRehberger\BackgroundJobs\Contracts\Job;
+use PhilipRehberger\BackgroundJobs\BaseJob;
 
-class FailingJob implements Job
+class FailingJob extends BaseJob
 {
     public function handle(): void
     {

@@ -3,6 +3,7 @@
 [![Tests](https://github.com/philiprehberger/php-background-jobs/actions/workflows/tests.yml/badge.svg)](https://github.com/philiprehberger/php-background-jobs/actions/workflows/tests.yml)
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/philiprehberger/php-background-jobs.svg)](https://packagist.org/packages/philiprehberger/php-background-jobs)
 [![License](https://img.shields.io/github/license/philiprehberger/php-background-jobs)](LICENSE)
+[![Sponsor](https://img.shields.io/badge/sponsor-GitHub%20Sponsors-ec6cb9)](https://github.com/sponsors/philiprehberger)
 
 Lightweight background job queue with file-based driver.
 

@@ -2,7 +2,7 @@
 
 [![Tests](https://github.com/philiprehberger/php-background-jobs/actions/workflows/tests.yml/badge.svg)](https://github.com/philiprehberger/php-background-jobs/actions/workflows/tests.yml)
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/philiprehberger/php-background-jobs.svg)](https://packagist.org/packages/philiprehberger/php-background-jobs)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![License](https://img.shields.io/github/license/philiprehberger/php-background-jobs)](LICENSE)
 
 Lightweight, framework-agnostic background job queue with a file-based driver for PHP 8.2+.
 
@@ -140,7 +140,7 @@ try {
 | `JobPayload` | `toArray(): array` | Serialize to array |
 | `JobPayload` | `fromArray(array $data): self` | Restore from array |
 
-## Testing
+## Development
 
 ```bash
 composer install
@@ -151,4 +151,4 @@ vendor/bin/phpstan analyse
 
 ## License
 
-MIT License. See [LICENSE](LICENSE) for details.
+MIT

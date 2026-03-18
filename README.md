@@ -4,7 +4,7 @@
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/philiprehberger/php-background-jobs.svg)](https://packagist.org/packages/philiprehberger/php-background-jobs)
 [![License](https://img.shields.io/github/license/philiprehberger/php-background-jobs)](LICENSE)
 
-Lightweight, framework-agnostic background job queue with a file-based driver for PHP 8.2+.
+Lightweight background job queue with file-based driver.
 
 ## Requirements
 

@@ -15,4 +15,11 @@ interface QueueDriver
     public function size(): int;
 
     public function clear(): void;
+
+    /**
+     * Get all pending job payloads.
+     *
+     * @return list<JobPayload>
+     */
+    public function pending(): array;
 }

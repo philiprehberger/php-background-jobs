@@ -21,6 +21,10 @@ final class Queue
         $payload = JobPayload::fromJob($job);
         $this->driver->push($payload);
 
+        if ($job instanceof BaseJob) {
+            $job->storeCallbacks($payload->id);
+        }
+
         return $payload->id;
     }
 
@@ -31,6 +35,10 @@ final class Queue
     {
         $payload = JobPayload::fromJob($job, $delaySeconds);
         $this->driver->push($payload);
+
+        if ($job instanceof BaseJob) {
+            $job->storeCallbacks($payload->id);
+        }
 
         return $payload->id;
     }
@@ -57,5 +65,15 @@ final class Queue
     public function clear(): void
     {
         $this->driver->clear();
+    }
+
+    /**
+     * Get all pending job payloads.
+     *
+     * @return list<JobPayload>
+     */
+    public function pending(): array
+    {
+        return $this->driver->pending();
     }
 }

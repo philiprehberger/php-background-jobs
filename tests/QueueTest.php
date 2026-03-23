@@ -164,4 +164,96 @@ final class QueueTest extends TestCase
         $incremented2 = $incremented->withIncrementedAttempts();
         $this->assertSame(2, $incremented2->attempts);
     }
+
+    public function test_on_success_callback_fires_after_successful_job(): void
+    {
+        $called = false;
+        $job = new TestJob;
+        $job->onSuccess(function () use (&$called) {
+            $called = true;
+        });
+
+        $this->queue->push($job);
+        Worker::processNext($this->queue);
+
+        $this->assertTrue($called);
+    }
+
+    public function test_on_failure_callback_fires_after_failed_job(): void
+    {
+        $called = false;
+        $receivedException = null;
+        $job = new FailingJob;
+        $job->onFailure(function ($job, \Throwable $e) use (&$called, &$receivedException) {
+            $called = true;
+            $receivedException = $e;
+        });
+
+        $this->queue->push($job);
+
+        try {
+            Worker::processNext($this->queue);
+        } catch (JobFailedException) {
+            // Expected
+        }
+
+        $this->assertTrue($called);
+        $this->assertNotNull($receivedException);
+        $this->assertSame('Job failed intentionally', $receivedException->getMessage());
+    }
+
+    public function test_get_attempts_returns_correct_count(): void
+    {
+        $job = new TestJob;
+        $this->assertSame(0, $job->getAttempts());
+
+        $this->queue->push($job);
+        Worker::processNext($this->queue);
+
+        // After processing, the worker sets attempts from the payload.
+        // The payload gets incremented to 1 when popped.
+        // We verify by checking the job resolved inside the worker.
+        // Instead, we test via a callback that captures the job.
+        $attempts = null;
+        $job2 = new TestJob;
+        $job2->onSuccess(function ($j) use (&$attempts) {
+            $attempts = $j->getAttempts();
+        });
+
+        $this->queue->push($job2);
+        Worker::processNext($this->queue);
+
+        $this->assertSame(1, $attempts);
+    }
+
+    public function test_pending_returns_correct_job_list(): void
+    {
+        $this->queue->push(new TestJob('first'));
+        $this->queue->push(new TestJob('second'));
+        $this->queue->push(new TestJob('third'));
+
+        $pending = $this->queue->pending();
+
+        $this->assertCount(3, $pending);
+        $this->assertInstanceOf(JobPayload::class, $pending[0]);
+        $this->assertInstanceOf(JobPayload::class, $pending[1]);
+        $this->assertInstanceOf(JobPayload::class, $pending[2]);
+    }
+
+    public function test_pending_returns_empty_array_when_no_jobs(): void
+    {
+        $this->assertSame([], $this->queue->pending());
+    }
+
+    public function test_pending_decreases_after_processing(): void
+    {
+        $this->queue->push(new TestJob('a'));
+        $this->queue->push(new TestJob('b'));
+
+        $this->assertCount(2, $this->queue->pending());
+
+        Worker::processNext($this->queue);
+
+        $this->assertCount(1, $this->queue->pending());
+    }
 }
